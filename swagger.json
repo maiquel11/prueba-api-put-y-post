@@ -1,0 +1,118 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "FERREMAS API",
+    "version": "1.0.0",
+    "description": "Documentación de la API de FERREMAS para gestión de productos"
+  },
+  "servers": [
+    {
+      "url": "https://prueba-api-put-y-post-production.up.railway.app"
+    }
+  ],
+  "paths": {
+    "/api/productos": {
+      "get": {
+        "summary": "Obtener todos los productos",
+        "responses": {
+          "200": {
+            "description": "Lista de productos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Producto" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear un nuevo producto",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ProductoInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Producto creado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Producto" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/productos/{id}": {
+      "put": {
+        "summary": "Actualizar un producto",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ProductoInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Producto actualizado"
+          },
+          "404": {
+            "description": "Producto no encontrado"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Producto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "nombre": { "type": "string" },
+          "categoria": { "type": "string" },
+          "precio": { "type": "number" },
+          "stock": { "type": "integer" },
+          "esPromocion": { "type": "boolean" },
+          "esNovedad": { "type": "boolean" }
+        }
+      },
+      "ProductoInput": {
+        "type": "object",
+        "properties": {
+          "nombre": { "type": "string" },
+          "categoria": { "type": "string" },
+          "precio": { "type": "number" },
+          "stock": { "type": "integer" },
+          "esPromocion": { "type": "boolean" },
+          "esNovedad": { "type": "boolean" }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

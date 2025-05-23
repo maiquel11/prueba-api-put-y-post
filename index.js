@@ -1,10 +1,13 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
+import swaggerUi from 'swagger-ui-express';
+import fs from 'fs';
 
 const app = express();
 app.use(express.json());
+const swaggerDocument = JSON.parse(fs.readFileSync('./swagger.json', 'utf-8'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const productos = [];
 
 // Middleware de autenticación básica (token fijo)
 function authenticateToken(req, res, next) {
